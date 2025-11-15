@@ -1,0 +1,5 @@
+Core:
+Utils: Core
+Net: Core Utils
+App: Net Core
+Tests: App Utils

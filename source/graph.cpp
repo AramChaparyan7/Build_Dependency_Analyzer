@@ -15,14 +15,14 @@ Graph::Graph(const std::string& filename) {
         std::string str;
         getline(ss, str, ':');
         if(!nameToId.contains(str)) {
-            nameToId.insert({str, count});
+            nameToId.insert({str, count++});
             idToName.push_back(str);
             adj.push_back({});
         }
         std::string connect;
         while(ss >> connect) {
             if(!nameToId.contains(connect)) {
-                nameToId[connect] = ++count;
+                nameToId[connect] = count++;
                 idToName.push_back(connect);
                 adj.push_back({});
             }
@@ -55,6 +55,7 @@ Graph::Graph(const std::string& filename) {
         std::cout << "Cycle detected\n";
     }
     else hasCycle = false;
+    std::reverse(sort.begin(), sort.end());
 }
 
 void Graph::list() {
@@ -64,7 +65,7 @@ void Graph::list() {
 }
 
 void Graph::help() {
-    std::cout << "Commands\n" << "help\n" << "list\n" << "build(modul)\n" << "rebuild(modul)\n" << "build order\n" << "check cycle\n" << "exit"; 
+    std::cout << "\nCommands:\n" << "help\n" << "list\n" << "build(modul)\n" << "rebuild(modul)\n" << "build order\n" << "check cycle\n" << "exit\n"; 
 }
 
 void Graph::buildorder() {
@@ -79,6 +80,7 @@ void Graph::checkcycle() {
 }
 
 void Graph::build(const std::string& modul) {
+    std::cout << std::endl;
     if(!nameToId.contains(modul)) {
         std::cout << "No such modul\n";
         return;
@@ -90,17 +92,17 @@ void Graph::build(const std::string& modul) {
 }
 
 void Graph::rebuild(const std::string& modul) {
+    std::cout << std::endl;
     if(!nameToId.contains(modul)) {
         std::cout << "No such modul\n";
         return;
     } 
-    if(find(sort.begin(), sort.end(), nameToId[modul]) == sort.end()) {
-        std::cout << "Cycle detected\n";
-        return;
+    int i = 0;
+    for(; i < sort.size(); ++i) {
+        if(idToName[sort[i]] == modul) break;
     }
-    for(int i : sort) {
-        std::cout << idToName[i] << std::endl;
-        if(idToName[i] == modul) break; 
+    for(;i < sort.size(); ++i) {
+        std::cout << idToName[sort[i]]<<std::endl;
     }
 }
 
